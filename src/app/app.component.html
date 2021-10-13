@@ -1,7 +1,7 @@
 <p>
   <mat-toolbar color="primary">
     <span>{{title}}</span>
-    <button mat-button [matMenuTriggerFor]="webcamMenu">Webcam</button>
+    <!-- <button mat-button [matMenuTriggerFor]="webcamMenu">Webcam</button>
     <mat-menu #webcamMenu>
       <button mat-menu-item [routerLink]="['webcam/zxing-current', webcamId]">ZXing (Current)</button>
       <button mat-menu-item [routerLink]="['webcam/dynamsoft', webcamId]">Dynamsoft</button>
@@ -10,7 +10,7 @@
     <mat-menu #externalMenu>
       <button mat-menu-item [routerLink]="['external/zxing-current', externalId]">ZXing (Current)</button>
       <button mat-menu-item [routerLink]="['external/dynamsoft', externalId]">Dynamsoft</button>
-    </mat-menu>
+    </mat-menu> -->
   </mat-toolbar>
 </p>
 <router-outlet></router-outlet>

@@ -1,0 +1,13 @@
+mat-form-field{
+    margin: 10px 10px;
+    width: 25em;
+}
+button{
+    text-decoration: none;
+    margin: 10px 125px;
+    display: inline-block;
+    border-radius: 4px;
+    font-size: large;
+    padding-left: 2em;
+    padding-right: 2em;
+}

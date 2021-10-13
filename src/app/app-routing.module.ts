@@ -1,15 +1,12 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { ExternalDynamsoftComponent } from './external/dynamsoft/external-dynamsoft.component';
-import { ExternalZxingCurrentComponent } from './external/zxing-current/external-zxing-current.component';
-import { WebcamDynamsoftComponent } from './webcam/dynamsoft/webcam-dynamsoft.component';
-import { WebcamZxingCurrentComponent } from './webcam/zxing-current/webcam-zxing-current.component';
+import { HomeComponent } from './home/home.component';
+import { ScanComponent } from './scan/scan.component';
 
 const routes: Routes = [
-  {path: 'external/dynamsoft/:id', component: ExternalDynamsoftComponent},
-  {path: 'external/zxing-current/:id', component: ExternalZxingCurrentComponent},
-  {path: 'webcam/dynamsoft/:id', component: WebcamDynamsoftComponent},
-  {path: 'webcam/zxing-current/:id', component: WebcamZxingCurrentComponent}
+  {path: 'home', component: HomeComponent},
+  {path: '', redirectTo: '/home', pathMatch: 'full'},
+  {path: 'scan', component: ScanComponent}
 ];
 
 @NgModule({
