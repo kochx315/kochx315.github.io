@@ -1,0 +1,9 @@
+button {
+    text-decoration: none;
+    margin: 10px 10px;
+    display: inline-block;
+    border-radius: 4px;
+  }
+video, h2, h3, pre{
+    margin: 10px 10px;
+}
