@@ -10,7 +10,7 @@ export class HomeComponent implements OnInit {
   devices: any[] = [];
   selectedDeviceId: any;
 
-  scanningLibraries = ["ZXing (Current)", "Dynamsoft"];
+  scanningLibraries = ["ZXing (Current)", "ZXing (Modified)", "Dynamsoft"];
   selectedScanningLibrary: string;
 
   constructor(private router: Router) { }

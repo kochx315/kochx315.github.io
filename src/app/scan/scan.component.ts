@@ -8,7 +8,7 @@ declare var ZXing: any;
 @Component({
   selector: 'app-scan',
   templateUrl: './scan.component.html',
-  styleUrls: ['./scan.component.css']
+  styleUrls: ['./scan.component.css'],
 })
 export class ScanComponent implements OnInit {
   deviceId: any;
@@ -17,22 +17,25 @@ export class ScanComponent implements OnInit {
   video: any;
   scanner: any;
 
-  constructor(private activatedRoute: ActivatedRoute) { }
+  constructor(private activatedRoute: ActivatedRoute) {}
 
   async ngOnInit(): Promise<void> {
-    this.activatedRoute.queryParamMap.subscribe(params => {
+    this.activatedRoute.queryParamMap.subscribe((params) => {
       this.deviceId = params.get('deviceId');
-      this.scanType= params.get('scanType');
+      this.scanType = params.get('scanType');
     });
 
     this.video = document.getElementById('video');
 
-    switch(this.scanType) {
-      case "ZXing (Current)":
-        if (window.hasOwnProperty('ZXing') && !!ZXing.BrowserMultiFormatReader) {
+    switch (this.scanType) {
+      case 'ZXing (Current)':
+        if (
+          window.hasOwnProperty('ZXing') &&
+          !!ZXing.BrowserMultiFormatReader
+        ) {
           var hints = new Map(),
             formats = ZXing.BarcodeFormat[ZXing.BarcodeFormat['PDF_417']];
-    
+
           hints.set(
             ZXing.DecodeHintType[ZXing.DecodeHintType['POSSIBLE_FORMATS']],
             formats
@@ -43,24 +46,50 @@ export class ScanComponent implements OnInit {
           window.alert('This browser does not support barcode scanning.');
           this.result = 'ERROR';
         }
-    
+
         this.zxingParseBarcode();
-      break;
-      case "Dynamsoft":
+        break;
+      case 'ZXing (Modified)':
+        if (
+          window.hasOwnProperty('ZXing') &&
+          !!ZXing.BrowserPDF417Reader
+        ) {
+          this.scanner = new ZXing.BrowserPDF417Reader();
+        } else if (this.scanner === undefined) {
+          // browser not supported
+          window.alert('This browser does not support barcode scanning.');
+          this.result = 'ERROR';
+        }
+
+        const constraints: MediaStreamConstraints = {
+          video: {
+            deviceId: {
+              exact: this.deviceId
+            },
+            frameRate: {
+              ideal: 60,
+              min: 20,
+            },
+          },
+        };
+
+        this.zxingNewParseBarcode(constraints);
+        break;
+      case 'Dynamsoft':
         await DBR.BarcodeScanner.loadWasm();
-    
+
         this.scanner = await DBR.BarcodeScanner.createInstance();
         this.scanner.setUIElement(this.video);
-    
+
         await this.scanner.open();
         await this.scanner.setCurrentCamera(this.deviceId);
 
         this.dynamsoftParseBarcode();
-      break;
+        break;
     }
   }
 
-  zxingParseBarcode(){
+  zxingParseBarcode() {
     this.scanner
       .decodeOnceFromVideoDevice(this.deviceId, 'video')
       .then((data: { text: string }) => {
@@ -68,22 +97,30 @@ export class ScanComponent implements OnInit {
       });
   }
 
-  dynamsoftParseBarcode(){
-    this.scanner.onUnduplicatedRead= (txt: string, result: TextResult) => {
+  zxingNewParseBarcode(constraints) {
+    this.scanner
+      .decodeOnceFromConstraints(constraints, 'video')
+      .then((data: { text: string }) => {
+        this.result = data.text;
+      });
+  }
+
+  dynamsoftParseBarcode() {
+    this.scanner.onUnduplicatedRead = (txt: string, result: TextResult) => {
       this.result = txt;
-     };
+    };
   }
 
   reset() {
-    this.result = "";
+    this.result = '';
 
-    switch(this.scanType){
-      case "ZXing (Current)":
+    switch (this.scanType) {
+      case 'ZXing (Current)':
         this.zxingParseBarcode();
-      break;
-      case "Dynamsoft":
+        break;
+      case 'Dynamsoft':
         this.dynamsoftParseBarcode();
-      break;
+        break;
     }
   }
 }
